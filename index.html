@@ -1,154 +1,376 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LG Signage Firmware Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: #111; min-height: 100vh; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LG Signage Firmware Portal</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background: #f4f4f4;
+        color: #111;
+        min-height: 100vh;
+      }
 
-    .topbar {
-      background: #c8102e; color: #fff; padding: 14px 40px;
-      display: flex; align-items: center; gap: 16px;
-    }
-    .topbar-logo { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
-    .topbar-divider { width: 2px; height: 28px; background: rgba(255,255,255,0.35); }
-    .topbar-title { font-size: 14px; font-weight: 500; opacity: 0.9; }
+      .topbar {
+        background: #c8102e;
+        color: #fff;
+        padding: 14px 40px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .topbar-logo {
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+      .topbar-divider {
+        width: 2px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.35);
+      }
+      .topbar-title {
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
 
-    .notice-banner {
-      background: #fff3cd; border-bottom: 1px solid #f0c040;
-      padding: 10px 40px; display: flex; align-items: center; gap: 10px;
-      font-size: 12px; font-weight: 600; color: #7a5500; letter-spacing: 0.3px;
-    }
-    .notice-banner svg { width: 15px; height: 15px; flex-shrink: 0; color: #c89000; }
+      .notice-banner {
+        background: #fff3cd;
+        border-bottom: 1px solid #f0c040;
+        padding: 10px 40px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #7a5500;
+        letter-spacing: 0.3px;
+      }
+      .notice-banner svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        color: #c89000;
+      }
 
-    .wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px 80px; }
+      .wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+      }
 
-    .page-heading { margin-bottom: 36px; }
-    .page-heading h1 { font-size: 32px; font-weight: 900; color: #111; letter-spacing: -0.5px; }
-    .page-heading p { margin-top: 6px; font-size: 14px; color: #666; }
+      .page-heading {
+        margin-bottom: 36px;
+      }
+      .page-heading h1 {
+        font-size: 32px;
+        font-weight: 900;
+        color: #111;
+        letter-spacing: -0.5px;
+      }
+      .page-heading p {
+        margin-top: 6px;
+        font-size: 14px;
+        color: #666;
+      }
 
-    .section-title {
-      font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-      color: #999; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e0e0e0;
-    }
+      .section-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+      }
 
-    .cards {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 16px; margin-bottom: 56px;
-    }
-    .card { background: #fff; border: 1px solid #e0e0e0; border-left: 6px solid #c8102e; display: flex; flex-direction: column; }
-    .card-top { padding: 24px 28px 20px; border-bottom: 1px solid #f0f0f0; }
-    .card-client { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #c8102e; margin-bottom: 4px; }
-    .card-model { font-size: 38px; font-weight: 900; color: #111; letter-spacing: -1px; line-height: 1; }
-    .card-bottom { padding: 20px 28px 24px; flex: 1; display: flex; flex-direction: column; }
-    .spec-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; flex: 1; }
-    .spec-table tr { border-bottom: 1px solid #f0f0f0; }
-    .spec-table tr:last-child { border-bottom: none; }
-    .spec-table td { padding: 9px 0; font-size: 13px; }
-    .spec-table .label { color: #999; font-weight: 500; width: 45%; }
-    .spec-table .value { color: #111; font-weight: 600; }
-    .dl-btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: #111; color: #fff; text-decoration: none; font-size: 13px;
-      font-weight: 700; letter-spacing: 0.5px; padding: 14px 20px;
-      text-transform: uppercase; transition: background 0.15s;
-    }
-    .dl-btn:hover { background: #c8102e; }
-    .dl-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 16px;
+        margin-bottom: 56px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-left: 6px solid #c8102e;
+        display: flex;
+        flex-direction: column;
+      }
+      .card-top {
+        padding: 24px 28px 20px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .card-client {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #c8102e;
+        margin-bottom: 4px;
+      }
+      .card-model {
+        font-size: 38px;
+        font-weight: 900;
+        color: #111;
+        letter-spacing: -1px;
+        line-height: 1;
+      }
+      .card-bottom {
+        padding: 20px 28px 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .spec-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        flex: 1;
+      }
+      .spec-table tr {
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .spec-table tr:last-child {
+        border-bottom: none;
+      }
+      .spec-table td {
+        padding: 9px 0;
+        font-size: 13px;
+      }
+      .spec-table .label {
+        color: #999;
+        font-weight: 500;
+        width: 45%;
+      }
+      .spec-table .value {
+        color: #111;
+        font-weight: 600;
+      }
+      .dl-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #111;
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        padding: 14px 20px;
+        text-transform: uppercase;
+        transition: background 0.15s;
+      }
+      .dl-btn:hover {
+        background: #c8102e;
+      }
+      .dl-btn svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+      }
 
-    footer { text-align: center; font-size: 12px; color: #aaa; padding-top: 24px; border-top: 1px solid #e0e0e0; }
+      footer {
+        text-align: center;
+        font-size: 12px;
+        color: #aaa;
+        padding-top: 24px;
+        border-top: 1px solid #e0e0e0;
+      }
 
-    @media (max-width: 560px) {
-      .cards { grid-template-columns: 1fr; }
-      .topbar { padding: 12px 20px; }
-      .notice-banner { padding: 10px 20px; }
-      .wrapper { padding: 32px 16px 60px; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="topbar">
-    <div class="topbar-logo">LG</div>
-    <div class="topbar-divider"></div>
-    <div class="topbar-title">Signage Firmware Portal &mdash; Internal Distribution</div>
-  </div>
-
-  <div class="notice-banner">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-      <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-    For authorized operational use only &mdash; Do not redistribute
-  </div>
-
-  <div class="wrapper">
-
-    <div class="page-heading">
-      <h1>Firmware Download</h1>
-      <p>Select your device model below to download the latest firmware package.</p>
+      @media (max-width: 560px) {
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        .topbar {
+          padding: 12px 20px;
+        }
+        .notice-banner {
+          padding: 10px 20px;
+        }
+        .wrapper {
+          padding: 32px 16px 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-logo">LG</div>
+      <div class="topbar-divider"></div>
+      <div class="topbar-title">
+        Signage Firmware Portal &mdash; Internal Distribution
+      </div>
     </div>
 
-    <div class="section-title">Available Packages</div>
-    <div class="cards">
+    <div class="notice-banner">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+        />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+      </svg>
+      For authorized operational use only &mdash; Do not redistribute
+    </div>
 
-      <div class="card">
-        <div class="card-top">
-          <div class="card-client">Client &middot; PC</div>
-          <div class="card-model">SM5KD</div>
+    <div class="wrapper">
+      <div class="page-heading">
+        <h1>Firmware Download</h1>
+        <p>
+          Select your device model below to download the latest firmware
+          package.
+        </p>
+      </div>
+
+      <div class="section-title">Available Packages</div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-top">
+            <div class="card-client">Client &middot; PBI</div>
+            <div class="card-model">SM5KD</div>
+          </div>
+          <div class="card-bottom">
+            <table class="spec-table">
+              <tr>
+                <td class="label">WebOS Version</td>
+                <td class="value">3.2 (3.0+)</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Version</td>
+                <td class="value">04.06.80</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Filename</td>
+                <td class="value">SM5(K)D-04.06.80.epk</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware File Format</td>
+                <td class="value">EPK</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Folder</td>
+                <td class="value">LG_MONITOR</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Size</td>
+                <td class="value">710 MB</td>
+              </tr>
+              <tr>
+                <td class="label">Format Download</td>
+                <td class="value">WinRAR Archive (.rar)</td>
+              </tr>
+            </table>
+            <a
+              href="https://drive.usercontent.google.com/download?id=1siRK8QWiIgv6L5QioTAbw0kLUUoXctol&export=download&authuser=0"
+              class="dl-btn"
+              target="_blank"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Firmware
+            </a>
+          </div>
         </div>
-        <div class="card-bottom">
-          <table class="spec-table">
-            <tr><td class="label">WebOS Version</td><td class="value">3.2 (3.0+)</td></tr>
-            <tr><td class="label">Firmware Version</td><td class="value">04.06.80</td></tr>
-            <tr><td class="label">Firmware Filename</td><td class="value">SM5(K)D-04.06.80.epk</td></tr>
-            <tr><td class="label">Firmware File Format</td><td class="value">EPK</td></tr>
-            <tr><td class="label">Firmware Folder</td><td class="value">LG_MONITOR</td></tr>
-            <tr><td class="label">Firmware Size</td><td class="value">710 MB</td></tr>
-            <tr><td class="label">Format Download</td><td class="value">WinRAR Archive (.rar)</td></tr>
-          </table>
-          <a href="https://drive.usercontent.google.com/download?id=1siRK8QWiIgv6L5QioTAbw0kLUUoXctol&export=download&authuser=0" class="dl-btn" target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            Download Firmware
-          </a>
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-client">Client &middot; PC</div>
+            <div class="card-model">SM5J</div>
+          </div>
+          <div class="card-bottom">
+            <table class="spec-table">
+              <tr>
+                <td class="label">WebOS Version</td>
+                <td class="value">6.0</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Version</td>
+                <td class="value">03.73.40</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Filename</td>
+                <td
+                  class="value"
+                  style="word-break: break-all; font-size: 11px"
+                >
+                  SM5J_UL3J_UH5J_UH7J_UH5N_UH7N_UM5N_UM5K_03.73.40.epk
+                </td>
+              </tr>
+              <tr>
+                <td class="label">Firmware File Format</td>
+                <td class="value">EPK</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Folder</td>
+                <td class="value">LG_MONITOR</td>
+              </tr>
+              <tr>
+                <td class="label">Firmware Size</td>
+                <td class="value">1.1 GB</td>
+              </tr>
+              <tr>
+                <td class="label">Format Download</td>
+                <td class="value">WinRAR Archive (.rar)</td>
+              </tr>
+            </table>
+            <a
+              href="https://drive.usercontent.google.com/download?id=1DbjxoXQkpDC7cAHvQ1hatNLMeuaWGD3i&export=download&authuser=0"
+              class="dl-btn"
+              target="_blank"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Firmware
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-top">
-          <div class="card-client">Client &middot; PBI</div>
-          <div class="card-model">SM5J</div>
-        </div>
-        <div class="card-bottom">
-          <table class="spec-table">
-            <tr><td class="label">WebOS Version</td><td class="value">6.0</td></tr>
-            <tr><td class="label">Firmware Version</td><td class="value">03.73.40</td></tr>
-            <tr><td class="label">Firmware Filename</td><td class="value" style="word-break:break-all;font-size:11px;">SM5J_UL3J_UH5J_UH7J_UH5N_UH7N_UM5N_UM5K_03.73.40.epk</td></tr>
-            <tr><td class="label">Firmware File Format</td><td class="value">EPK</td></tr>
-            <tr><td class="label">Firmware Folder</td><td class="value">LG_MONITOR</td></tr>
-            <tr><td class="label">Firmware Size</td><td class="value">1.1 GB</td></tr>
-            <tr><td class="label">Format Download</td><td class="value">WinRAR Archive (.rar)</td></tr>
-          </table>
-          <a href="https://drive.usercontent.google.com/download?id=1DbjxoXQkpDC7cAHvQ1hatNLMeuaWGD3i&export=download&authuser=0" class="dl-btn" target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            Download Firmware
-          </a>
-        </div>
-      </div>
-
+      <footer>LG Signage Firmware Portal &mdash; Internal Use Only</footer>
     </div>
-
-    <footer>
-      LG Signage Firmware Portal &mdash; Internal Use Only
-    </footer>
-
-  </div>
-</body>
+  </body>
 </html>
